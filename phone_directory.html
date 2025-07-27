@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دفترچه تلفن شرکت</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 30px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .search-section {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box, .filter-select {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        .search-box:focus, .filter-select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .search-box::placeholder {
+            color: #999;
+        }
+
+        .clear-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .directory {
+            padding: 30px;
+        }
+
+        .department {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .department:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .department-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .department-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .priority-dept .department-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 25px;
+        }
+
+        .staff-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .staff-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .staff-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .staff-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: white;
+        }
+
+        .manager-card {
+            border: 2px solid #ffd700;
+            background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+            position: relative;
+        }
+
+        .manager-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            color: #333;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+        }
+
+        .staff-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .staff-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .info-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box, .filter-select, .clear-btn {
+                min-width: unset;
+                width: 100%;
+            }
+
+            .staff-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>دفترچه تلفن شرکت</h1>
+            <p>راهنمای تماس کارکنان</p>
+        </div>
+
+        <div class="controls">
+            <div class="search-section">
+                <input type="text" class="search-box" id="searchInput" placeholder="جستجو در نام، شماره داخلی یا ایمیل...">
+                <select class="filter-select" id="departmentFilter">
+                    <option value="">همه واحدها</option>
+                </select>
+                <button class="clear-btn" id="clearBtn">پاک کردن</button>
+            </div>
+        </div>
+
+        <div class="stats" id="statsBar">
+            در حال بارگذاری...
+        </div>
+
+        <div class="directory" id="directory">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>در حال بارگذاری اطلاعات...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let staffData = [];
+        let filteredData = [];
+        
+        // Priority departments
+        const priorityDepts = ['مسئول دفتر', 'مدیریت', 'معاونت مالی هلدینگ کشت و صنعت'];
+
+        // Load Excel file
+        async function loadExcelData() {
+            try {
+                const data = await window.fs.readFile('numbers.xlsx');
+                const workbook = XLSX.read(data, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                // Process data (skip header row)
+                staffData = jsonData.slice(1).map(row => ({
+                    department: row[0] || '',
+                    name: row[1] || '',
+                    internal: row[2] || '',
+                    email: row[3] || ''
+                })).filter(item => item.name.trim() !== '');
+
+                populateFilters();
+                renderDirectory();
+                updateStats();
+            } catch (error) {
+                console.error('Error loading Excel file:', error);
+                // Fallback with sample data
+                staffData = [
+                    { department: 'مدیریت', name: 'علی احمدی', internal: '101', email: 'a.ahmadi@company.com' },
+                    { department: 'مدیریت', name: 'سارا رضایی', internal: '102', email: 's.rezaei@company.com' },
+                    { department: 'مسئول دفتر', name: 'محمد کریمی', internal: '201', email: 'm.karimi@company.com' },
+                    { department: 'معاونت مالی هلدینگ کشت و صنعت', name: 'فاطمه نوری', internal: '301', email: 'f.nouri@company.com' },
+                    { department: 'فروش', name: 'حسن محمدی', internal: '401', email: 'h.mohammadi@company.com' }
+                ];
+                populateFilters();
+                renderDirectory();
+                updateStats();
+            }
+        }
+
+        function populateFilters() {
+            const departments = [...new Set(staffData.map(item => item.department))];
+            const sortedDepts = sortDepartments(departments);
+            
+            const filterSelect = document.getElementById('departmentFilter');
+            filterSelect.innerHTML = '<option value="">همه واحدها</option>';
+            
+            sortedDepts.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept;
+                option.textContent = dept;
+                filterSelect.appendChild(option);
+            });
+        }
+
+        function sortDepartments(departments) {
+            const priority = [];
+            const others = [];
+            
+            departments.forEach(dept => {
+                if (priorityDepts.includes(dept)) {
+                    priority.push(dept);
+                } else {
+                    others.push(dept);
+                }
+            });
+            
+            // Sort priority by original order, others alphabetically
+            priority.sort((a, b) => priorityDepts.indexOf(a) - priorityDepts.indexOf(b));
+            others.sort();
+            
+            return [...priority, ...others];
+        }
+
+        function groupByDepartment(data) {
+            const grouped = {};
+            data.forEach(item => {
+                if (!grouped[item.department]) {
+                    grouped[item.department] = [];
+                }
+                grouped[item.department].push(item);
+            });
+            return grouped;
+        }
+
+        function renderDirectory() {
+            const directory = document.getElementById('directory');
+            const currentFilter = document.getElementById('departmentFilter').value;
+            const currentSearch = document.getElementById('searchInput').value.toLowerCase();
+            
+            // Filter data
+            filteredData = staffData.filter(item => {
+                const matchesFilter = !currentFilter || item.department === currentFilter;
+                const matchesSearch = !currentSearch || 
+                    item.name.toLowerCase().includes(currentSearch) ||
+                    item.internal.includes(currentSearch) ||
+                    item.email.toLowerCase().includes(currentSearch);
+                
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filteredData.length === 0) {
+                directory.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>نتیجه‌ای یافت نشد</h3>
+                        <p>لطفاً کلمات کلیدی دیگری را امتحان کنید</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const grouped = groupByDepartment(filteredData);
+            const sortedDepts = sortDepartments(Object.keys(grouped));
+            
+            let html = '';
+            
+            sortedDepts.forEach(dept => {
+                const isPriority = priorityDepts.includes(dept);
+                const staff = grouped[dept];
+                
+                html += `
+                    <div class="department ${isPriority ? 'priority-dept' : ''}">
+                        <div class="department-header">
+                            ${dept}
+                            <span style="float: left; font-size: 0.9rem; opacity: 0.8;">
+                                (${staff.length} نفر)
+                            </span>
+                        </div>
+                        <div class="staff-grid">
+                `;
+                
+                staff.forEach((person, index) => {
+                    const isManager = index === 0; // First person is manager
+                    
+                    html += `
+                        <div class="staff-card ${isManager ? 'manager-card' : ''}">
+                            ${isManager ? '<div class="manager-badge">مدیر</div>' : ''}
+                            <div class="staff-name">${person.name}</div>
+                            <div class="staff-info">
+                                <div class="info-item">
+                                    <div class="info-icon">📞</div>
+                                    <span>${person.internal}</span>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-icon">✉️</div>
+                                    <span>${person.email}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            directory.innerHTML = html;
+            updateStats();
+        }
+
+        function updateStats() {
+            const statsBar = document.getElementById('statsBar');
+            const totalStaff = filteredData.length;
+            const totalDepts = new Set(filteredData.map(item => item.department)).size;
+            
+            statsBar.textContent = `${totalStaff} کارمند در ${totalDepts} واحد`;
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('departmentFilter').value = '';
+            renderDirectory();
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', renderDirectory);
+        document.getElementById('departmentFilter').addEventListener('change', renderDirectory);
+        document.getElementById('clearBtn').addEventListener('click', clearFilters);
+
+        // Initialize
+        loadExcelData();
+    </script>
+</body>
+</html>
